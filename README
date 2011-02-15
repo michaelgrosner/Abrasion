@@ -8,24 +8,27 @@ search results' URL and page titles along with the total number of pages in the
 Google database corresponding to the query. Tested and works in Python 2.6-2.7
 in Mac OS and Ubunutu.
 
+I would, however, like to point out that common sense says Google may block
+your IP address/account if you're downloading too many pages or looking like a
+potential attacker. Use common sense.
+
 DEPENDENCIES:
 1. BeautifulSoup.py -- http://www.crummy.com/software/BeautifulSoup/
 
 SAMPLE USAGE:
-python googleize.py "search phrase" [option name]=[option value]
+python Abrasion.py "search phrase" [option name]=[option value]
 
 Or within a python script:
-import googleize
+import Abrasion
 'Number of results', [link list], [title list] =
-	googleize.googleize([search string], [option name]=[option value])
+	Abrasion.googleize([search string], [option name]=[option value])
 
 OPTIONS:
 --nresults=   Number of results, an integer value. Defaults to 10.
 
 --type=       Type of search. Defaults to `search`. Also supported:
 	 `news`      Google News
-	 `shopping`  Google Shopping (although their links are quite uninteresting and no
-								 Google Shopping specific options are implemented yet)
+	 `shopping`  Google Shopping (No Google Shopping specific options are implemented yet)
 	 `blogs`     Search blogs
 	 `video`     Search videos (not just youtube)
 
@@ -53,7 +56,7 @@ OPTIONS:
 Example Usage:
 To get 100 links on "Android vs. iPhone" on www.engadget.com between
 10/20/2009 and 2/4/2010 from shell and dump it into a cPickle object,
-python googleize.py "Android vs. iPhone" --nresults=100 --timing=range --datestart=10/20/2009
+python Abrasion.py "Android vs. iPhone" --nresults=100 --timing=range --datestart=10/20/2009
 	--dateend=02/04/2010 -f androidiphone.txt
 
 In future versions, I would like to:
