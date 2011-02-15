@@ -1,0 +1,68 @@
+Abrasion by Michael Grosner
+Licensed under the Apache License (http://aws.amazon.com/apache2.0/)
+Version 0.01
+February 15, 2011
+
+A simple, free, open-source Python script which will return the first x Google
+search results' URL and page titles along with the total number of pages in the
+Google database corresponding to the query. Tested and works in Python 2.6-2.7
+in Mac OS and Ubunutu.
+
+DEPENDENCIES:
+1. BeautifulSoup.py -- http://www.crummy.com/software/BeautifulSoup/
+
+SAMPLE USAGE:
+python googleize.py "search phrase" [option name]=[option value]
+
+Or within a python script:
+import googleize
+'Number of results', [link list], [title list] =
+	googleize.googleize([search string], [option name]=[option value])
+
+OPTIONS:
+--nresults=   Number of results, an integer value. Defaults to 10.
+
+--type=       Type of search. Defaults to `search`. Also supported:
+	 `news`      Google News
+	 `shopping`  Google Shopping (although their links are quite uninteresting and no
+								 Google Shopping specific options are implemented yet)
+	 `blogs`     Search blogs
+	 `video`     Search videos (not just youtube)
+
+
+--timing=     Result ordering by Google. Currently supports:
+	 `relevance` Sort by PageRank relevance (default)
+	 `latest`    Sort by realtime updates to Google
+	 `range`     Use when specifying a datestart and/or dateend
+	 `date`      Sort by date, most recent at the top
+--datestart=  Start date to search in MM/DD/YYYY format or a python datetime object.
+--dateend=    End date to search in MM/DD/YYYY format or a python datetime object.
+
+--language=   Change the language which to search in. Defaults to `en`.
+
+--safe=       SafeSearch `on` or `off`. Defaults to `off`
+
+--site=       Search within a domain. No default value.
+
+-f [filename] Use cPickle to dump results in Python list form
+
+-u            Show help dialog (this text)
+
+-v            Verbose mode. Print Google links used to stdout.
+
+Example Usage:
+To get 100 links on "Android vs. iPhone" on www.engadget.com between
+10/20/2009 and 2/4/2010 from shell and dump it into a cPickle object,
+python googleize.py "Android vs. iPhone" --nresults=100 --timing=range --datestart=10/20/2009
+	--dateend=02/04/2010 -f androidiphone.txt
+
+In future versions, I would like to:
+- Improve the general algorithm
+	== Issues with flexibilty
+	== Sites 10-15(?) may not be downloaded if Google decides to give video/news links
+	== Related to above, Google also gives maps links which could be cut out, can't
+		 figure out how short of banning all maps.google.com links
+- Include scraping of other search engines
+- Other search types, i.e. Books, Videos, Shopping
+- Return descriptions and other data
+- Improved error handling
