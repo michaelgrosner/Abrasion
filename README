@@ -1,10 +1,10 @@
 Abrasion by Michael Grosner
 Licensed under the Apache License (http://aws.amazon.com/apache2.0/)
-Version 0.01
+Version 0.02
 February 15, 2011
 
-A simple, free, open-source Python script which will return the first x Google
-search results' URL and page titles along with the total number of pages in the
+A simple, free, open-source Python script which will return the first x Google or
+Bing search results' URL and page titles along with the total number of pages in the
 Google database corresponding to the query. Tested and works in Python 2.6-2.7
 in Mac OS and Ubunutu.
 
@@ -22,18 +22,22 @@ Or within a python script:
 import Abrasion
 'Number of results', [link list], [title list] =
 	Abrasion.googleize([search string], [option name]=[option value])
+[link list] = Abrasion.bingize([search string], [option name]=[option value])
 
 OPTIONS:
---nresults=   Number of results, an integer value. Defaults to 10.
+--engine=     Search engine to utilize. Currently supports:
+	 `google`    Google (default).
+	 `bing`      Bing   (not well supported yet)
+
+--nresults=   Number of results, an integer value. Defaults to 10. [b]
 
 --type=       Type of search. Defaults to `search`. Also supported:
-	 `news`      Google News
-	 `shopping`  Google Shopping (No Google Shopping specific options are implemented yet)
-	 `blogs`     Search blogs
-	 `video`     Search videos (not just youtube)
+	 `news`      News
+	 `shopping`  Google Shopping (No Google Shopping specific options are implemented yet) [b]
+	 `blogs`     Search blogs [b]
+	 `video`     Search videos (not just youtube) [b]
 
-
---timing=     Result ordering by Google. Currently supports:
+--timing=     Result ordering by Google. Currently supports: [b]
 	 `relevance` Sort by PageRank relevance (default)
 	 `latest`    Sort by realtime updates to Google
 	 `range`     Use when specifying a datestart and/or dateend
@@ -43,21 +47,31 @@ OPTIONS:
 
 --language=   Change the language which to search in. Defaults to `en`.
 
---safe=       SafeSearch `on` or `off`. Defaults to `off`
+--safe=       SafeSearch `on` or `off`. Defaults to `off` [b]
 
 --site=       Search within a domain. No default value.
 
--f [filename] Use cPickle to dump results in Python list form
+-f [filename] Use cPickle to dump results in Python list form [b]
 
--u            Show help dialog (this text)
+-u            Show help dialog (this text) 
 
--v            Verbose mode. Print Google links used to stdout.
+-v            Verbose mode. Print Google links used to stdout. [b]
 
-Example Usage:
+[b] = Not implemented in Bing search (yet)
+
+EXAMPLE USAGE:
 To get 100 links on "Android vs. iPhone" on www.engadget.com between
 10/20/2009 and 2/4/2010 from shell and dump it into a cPickle object,
 python Abrasion.py "Android vs. iPhone" --nresults=100 --timing=range --datestart=10/20/2009
 	--dateend=02/04/2010 -f androidiphone.txt
+	
+VERSION HISTORY:
+0.02
+ - Included super-alpha version of Bing search
+ - Updated documentation
+ 
+0.01
+ - Initial release
 
 In future versions, I would like to:
 - Improve the general algorithm
