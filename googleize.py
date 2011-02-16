@@ -139,9 +139,11 @@ def googleize(search_term, type='search',
 		print 'Number of Results: %s\n\n' % foundResults	
 	
 	if output == 'h':
-		return (foundResults, linkList, titleList)
+		return (foundResults, zip(linkList, titleList))
 	elif output == 'p':
 		for t, l in zip(titleList, linkList):
 			print '%s\n%s\n' % (t, l)
+	elif output == 's':
+		print (foundResults, zip(linkList, titleList))
 	else:
 		cPickle.dump([foundResults, linkList, titleList], open(output, 'w'))

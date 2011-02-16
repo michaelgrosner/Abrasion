@@ -84,7 +84,7 @@ if __name__ == '__main__':
 		quit()
 	
 	search_term = sys.argv[1]
-	opts, args = getopt.getopt(sys.argv[2:], 'hpvuf:', ['engine=', 'nresults=', 'site=', 'timing=', 'startdate=', 'enddate=', 'type=', 'language=', 'safe='])
+	opts, args = getopt.getopt(sys.argv[2:], 'hpvusf:', ['engine=', 'nresults=', 'site=', 'timing=', 'startdate=', 'enddate=', 'type=', 'language=', 'safe='])
 	
 	# Default parameters for lookup
 	engine='google'
@@ -118,7 +118,7 @@ if __name__ == '__main__':
 		elif o == '--safe':
 			safe = a
 		elif o == '--language':
-			language = o
+			language = a
 		elif o == '-h':
 			output = 'h'
 		elif o == '-f':
@@ -128,10 +128,19 @@ if __name__ == '__main__':
 		elif o == '-u':
 			usage()
 			quit()
+		elif o == '-s':
+			output = 's'
 		elif o == '-v':
 			verbose = True
 	
 	if engine == 'google':	
 		googleize.googleize(search_term, type=type, site=site, timing=timing, startdate=startdate, enddate=enddate, nresults=nresults, output=output, verbose=verbose)
 	elif engine == 'bing':
-		bingize.bingize(search_term, language=language, site=site, type=type)
+		bingize.bingize(search_term, language=language, site=site, type=type, nresults=nresults)
+	elif engine in ('yahoo', 'altavista', 'blekko'):
+		raise Exception('Searching for %s not implemented yet' % engine)
+	elif engine =='compare':
+		# Create a new comparison function later
+		pass
+	else:
+		raise Exception('Searching for %s not allowed' % engine)
