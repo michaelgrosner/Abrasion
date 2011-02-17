@@ -24,11 +24,11 @@ Usage:
 
 Options:
 	--engine=    Search engine to use. Defaults to 'google'. Also supports:
-               'bing', 'yahoo', 'twitter', 'ask', 'blekko'
+								'bing', 'yahoo', 'twitter', 'ask', 'blekko'
 	--nresults=  Number of results to serve back. Defaults to 10. Twitter API maxes
-               out at 100.
+								out at 100.
 	--site=      Search within a specific domain i.e. search all "Google" articles on
-               'engadget.com'. Not supported on 'twitter'.
+				       'engadget.com'. Not supported on 'twitter'.
 	-f           Do not follow bit.ly, goo.gl, etc. redirect links.
 
 Written by Michael Grosner
