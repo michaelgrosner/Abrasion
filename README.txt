@@ -5,7 +5,6 @@ abrasionSearch is a very small, free, command-line interface to searching
   4. Yahoo!
   5. Blekko
   6. Ask
-  7. (not implemented yet) DuckDuckGo
 
 Provide a search term and the maximum number of results desired, and Abrasion will
 use any or all of the above search engines to return a list of links. That is all.
