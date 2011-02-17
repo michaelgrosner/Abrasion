@@ -23,13 +23,13 @@ Usage:
   > [return list] = abrasion.Search('search phrase', [options]=[value], )
 
 Options:
-  --engine=    Search engine to use. Defaults to 'google'. Also supports:
-                'bing', 'yahoo', 'twitter', 'ask', 'blekko'
-  --nresults=  Number of results to serve back. Defaults to 10. Twitter API maxes
-                out at 100.
-  --site=      Search within a specific domain i.e. search all "Google" articles on
-               'engadget.com'. Not supported on 'twitter'.
-  -f           Do not follow bit.ly, goo.gl, etc. redirect links.
+  --engine=    Search engine to use. Defaults to 'google'. Also supports: 'bing', 'yahoo', 'twitter', 'ask', 'blekko'
+  
+	--nresults=  Number of results to serve back. Defaults to 10. Twitter API maxes out at 100.
+  
+	--site=      Search within a specific domain i.e. search all "Google" articles on 'engadget.com'. Not supported on 'twitter'.
+  
+	-f           Do not follow bit.ly, goo.gl, etc. redirect links.
 
 Written by Michael Grosner
 Feb 16, 2011
