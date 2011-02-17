@@ -38,8 +38,8 @@ Options:
   
   --nresults=  Number of results to serve back. Defaults to 10. Twitter API maxes out at 100.
   
-  --site=      Search within a specific domain i.e. search for all "iPhone" articles on 'engadget.com'. Not supported on
-               'twitter'.
+  --site=      Search within a specific domain i.e. search for all "iPhone" articles on 'engadget.com'. Not supported
+               on 'twitter'.
   
   -a           Search all search engines. Optional, but overrides '--engine' settings.
   
