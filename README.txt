@@ -6,11 +6,13 @@ abrasionSearch is a very small, free, command-line interface to searching
   5. Blekko
   6. Ask
 
-Provide a search term and Abrasion willuse any or all of the above search engines to return a list of URLs. That is all it does.
-This project was born out of a desire to do text analysis on past news and blog articles, and I could not find a single, unified
-CLI to search even Google. As this is essentially a scraper (thus the name abrasion) of these sites, please be mindful that many
-repeated calls to this script could get your IP address blocked by the search engines. This script was designed purely out of
-intellectual curiosity and is my very first code I've ever posted on the internet.
+Provide a search term and Abrasion willuse any or all of the above search engines to return a list of URLs. That is all
+it does. This project was born out of a desire to do text analysis on past news and blog articles, and I could not find
+a single, unified CLI to search even Google. As this is essentially a scraper (thus the name abrasion) of these sites,
+please be mindful that many repeated calls to this script could get your IP address blocked by the search engines.
+
+This script was designed purely out of intellectual curiosity and is my very first code I've ever posted on the
+internet. Any tips, corrections, updates, or general life lessons are greatly appreciated.
 
 Dependencies:
 1. Python 2.6-2.7 (tested on Mac OS X and Ubuntu)
