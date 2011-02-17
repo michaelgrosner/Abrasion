@@ -27,7 +27,8 @@ Options:
   
   --nresults=  Number of results to serve back. Defaults to 10. Twitter API maxes out at 100.
   
-  --site=      Search within a specific domain i.e. search all "Google" articles on 'engadget.com'. Not supported on 'twitter'.
+  --site=      Search within a specific domain i.e. search all "Google" articles on 'engadget.com'. Not supported on
+               'twitter'.
   
   -f           Do not follow bit.ly, goo.gl, etc. redirect links.
 
