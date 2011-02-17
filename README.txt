@@ -14,6 +14,12 @@ Dependencies:
 2. BeautifulSoup (www.crummy.com/software/BeautifulSoup/) placed in either your
    PYTHONPATH or in the same directory as abrasionSearch
 
+Installation:
+1. python setup.py build
+   [sudo] python setup.py install
+2. Simply drop abrasion.py into which ever directory you need as long as Python
+   can find BeautifulSoup
+
 Usage:
 1. From command-line:
   > python abrasion.py "search phrase" --[options]=[value]
@@ -23,14 +29,18 @@ Usage:
 
 Options:
   --engine=    Search engine to use. Defaults to 'google'. Also supports: 'bing', 'yahoo', 'twitter', 'ask', 'blekko'
+               Supports combinations of the above search engines, so passing a list of ['bing', 'twitter'] will search
+               those two sites. Can be overridden by '-a' option.
   
   --nresults=  Number of results to serve back. Defaults to 10. Twitter API maxes out at 100.
   
   --site=      Search within a specific domain i.e. search all "Google" articles on 'engadget.com'. Not supported on
                'twitter'.
   
-  -f           Do not follow bit.ly, goo.gl, etc. redirect links.
+  -a           Search all search engines. Optional but overrides '--engine' settings
+  
+  -f           Do not follow bit.ly, goo.gl, etc. redirect links while searching 'twitter'
 
 Written by Michael Grosner
-Feb 16, 2011
+Feb 17, 2011
 Use freely; add, fork, include in your work, etc.

@@ -50,6 +50,7 @@ def twitterSearch(search_term, nresults=80, followLinks=True, output='p'):
 	# directly into python code, change the output. I would rather print out the linkList
 	# in this manner so it'd be easier to run on a pipe for further processing.
 	if output == 'p':
+		print '=> Results for: twitter' 
 		for l in linkList:
 			print l
 	elif output == 'r':
@@ -137,6 +138,7 @@ def webSearch(search_term, engine='google', site=False, nresults=10, output='p')
 	
 	# As in the Twitter search, output in different ways.
 	if output == 'p':
+		print '=> Results for: %s' % engine
 		for l in linkList:
 			print l
 	elif output == 'r':
@@ -146,10 +148,22 @@ def webSearch(search_term, engine='google', site=False, nresults=10, output='p')
 # to Twitter or web-based searches
 def Search(search_term, engine='google', site=False, followLinks=True, nresults=10, output='r'):
 	
-	if engine == 'twitter':
-		twitterSearch(search_term, nresults, followLinks, output)
-	elif engine in ['google', 'yahoo', 'bing', 'blekko', 'ask']:
-		webSearch(search_term, engine, site, nresults, output)
+	print engine
+	# Convert indicated search engine to a list to loop over if passed as a string 
+	if isinstance(engine, str): engine = [engine]
+	
+	# And make sure no other cruft gets through, just lists
+	assert isinstance(engine,list)
+	
+	# Return links in a dictionary format
+	links = {}
+	for e in engine:
+		if e == 'twitter':
+			links[e] = twitterSearch(search_term, nresults, followLinks, output)
+		elif e in ['google', 'yahoo', 'bing', 'blekko', 'ask']:
+			links[e] = webSearch(search_term, e, site, nresults, output)
+		
+	return links
 	
 # This function handles the command-line arguments, passing them to Search()
 def searchFromBash():
@@ -173,6 +187,8 @@ def searchFromBash():
 			nresults = a
 		elif o == '--site':
 			site=site
+			
+	if searchAll: engine = ['google', 'yahoo', 'bing', 'blekko', 'ask', 'twitter']
 		
 	Search(search_term, engine=engine, site=site, followLinks=followLinks, nresults=nresults, output='p')
 
