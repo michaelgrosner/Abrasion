@@ -13,7 +13,7 @@ use any or all of the above search engines to return a list of links. That is al
 Dependencies:
 1. Python 2.6-2.7 (tested on Mac OS X and Ubuntu)
 2. BeautifulSoup (www.crummy.com/software/BeautifulSoup/) placed in either your
-	 PYTHONPATH or in the same directory as abrasionSearch
+   PYTHONPATH or in the same directory as abrasionSearch
 
 Usage:
 1. From command-line:
@@ -24,11 +24,11 @@ Usage:
 
 Options:
 	--engine=    Search engine to use. Defaults to 'google'. Also supports:
-							 'bing', 'yahoo', 'twitter', 'ask', 'blekko'
+               'bing', 'yahoo', 'twitter', 'ask', 'blekko'
 	--nresults=  Number of results to serve back. Defaults to 10. Twitter API maxes
-							 out at 100.
+               out at 100.
 	--site=      Search within a specific domain i.e. search all "Google" articles on
-							 'engadget.com'. Not supported on 'twitter'.
+               'engadget.com'. Not supported on 'twitter'.
 	-f           Do not follow bit.ly, goo.gl, etc. redirect links.
 
 Written by Michael Grosner
