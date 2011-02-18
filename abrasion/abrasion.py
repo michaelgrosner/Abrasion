@@ -3,8 +3,29 @@
 from BeautifulSoup import *
 import urllib2, datetime, re, json, sys, getopt
 
-def twitterSearch(search_term, nresults=80, followLinks=True, output='p'):
-	if nresults > 100: raise Exception('Please specify less than 100 results')
+def socialSearch(search_term, extra_params=False, api='facebook', nresults=10, followLinks=True, output='p'):
+	if nresults > 100 and api == 'twitter':
+		raise Exception('Please specify less than 100 results')
+		
+	urlregex = r"https?://([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?"
+	social_rules = {'twitter':  ['http://search.twitter.com/search.json?q=',      # Base link to api
+															 'results', 'text',                               # json dict handlers
+															 'rpp',                                           # key for nresults
+															 lambda url: re.compile(urlregex).findall(url)],  # URL extractor
+									'facebook': ['https://graph.facebook.com/search?q=',
+															 'data', 'source',
+															 'limit',
+															 lambda url: url],
+									#'reddit':   ['http://www.reddit.com/search?sort=new&q=',
+									#						 'data', 'url',
+									#						 False,
+									#						 lambda url: url]
+															 }
+	
+	if not extra_params: extra_params = {}
+	
+	# Add nresults to extra_params
+	if social_rules[api][-2]: extra_params[social_rules[api][3]] = nresults
 	
 	# As before, change our user agent to prevent blocking, although with Twitter
 	# I suspect they are much more liberal than the web searchers
@@ -13,50 +34,67 @@ def twitterSearch(search_term, nresults=80, followLinks=True, output='p'):
 
 	# Construct a URL based on documentation found at...
 	# http://apiwiki.twitter.com/w/page/22554756/Twitter-Search-API-Method:-search
-	url = 'http://search.twitter.com/search.json?q=%s&rpp=%i' % (search_term, nresults)
+	url = '%s%s' % (social_rules[api][0], search_term)
+	
+	if extra_params:
+		for k, v in extra_params.iteritems():
+			url += '&%s=%s' % (k,v)
 
 	# Try and grab the JSON formatted data
 	try:	
-		twitterData = json.load(opener.open(url))
+		socialData = json.load(opener.open(url))
 	except:
-		print 'Cannot load twitter data on %s' % search_term
-	
+		print 'Cannot load %s data on "%s"' % (api, search_term)
+		print url
+
+	if api == 'reddit':
+		socialData = socialData['data']['children']
+
 	linkList = []
-	for tweet in twitterData['results']:
-		
+	for post in socialData[ social_rules[api][1] ]:
 		# For every tweet, use a regex to grab the link component
-		text = tweet['text']
-		link = re.compile("https?://([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?").search(text)
+		try:
+			text = post[ social_rules[api][2] ]
+		except:
+			# No link available
+			continue
+			
+		link = social_rules[api][-1](text)
 
 		# Not every tweet will yield a link, so don't cause an error if no link is found.
 		# If there is a link, the regex is screwy and so the 0th and 2nd parts need to be
 		# rejoined
-		try:
-			lg = link.groups()
-			url = str(''.join([lg[0], lg[2]]))
-			
-			# If the user has indicated to follow all links, and not just get the bit.ly
-			# etc links, use the .geturl() method to find the followed URL
-			if followLinks:
-				r = opener.open('http://'+url)
-				linkList.append( r.geturl() )
-			else:	
-				linkList.append( url )
-				
-		except:
-			pass
-	
+		if isinstance(link,list) and api=='twitter':
+			for l in link:
+				try:
+					url = ''.join(l)
+					
+					# If the user has indicated to follow all links, and not just get the bit.ly
+					# etc links, use the .geturl() method to find the followed URL
+					if followLinks:
+						if url.startswith('http://') == False:
+							url = 'http://'+url
+						r = opener.open(url)
+						linkList.append( r.geturl() )
+					else:	
+						linkList.append( url )
+						
+				except:
+					pass
+		else:
+			linkList.append(link)	
+
 	# Depending on whether this is used through the command-line interface or plugged
 	# directly into python code, change the output. I would rather print out the linkList
 	# in this manner so it'd be easier to run on a pipe for further processing.
 	if output == 'p':
-		print '=> Results for: twitter' 
+		print '=> Results for: %s' % api 
 		for l in linkList:
 			print l
 	elif output == 'r':
 		return linkList
 
-def webSearch(search_term, engine='google', site=False, nresults=10, output='p'):
+def webSearch(search_term, extra_params=False, engine='google', site=False, nresults=10, output='p'):
 	
 	# Data structure containing the procedure to determining links
 	engine_rules = {'google': ['http://www.google.com/search?q=',          # Base URL for search engine
@@ -146,9 +184,8 @@ def webSearch(search_term, engine='google', site=False, nresults=10, output='p')
 
 # This function is the entry point for all searches, and will either send the search
 # to Twitter or web-based searches
-def Search(search_term, engine='google', site=False, followLinks=True, nresults=10, output='r'):
+def Search(search_term, extra_params=False, engine='google', site=False, followLinks=True, nresults=10, output='r'):
 	
-	print engine
 	# Convert indicated search engine to a list to loop over if passed as a string 
 	if isinstance(engine, str): engine = [engine]
 	
@@ -158,10 +195,10 @@ def Search(search_term, engine='google', site=False, followLinks=True, nresults=
 	# Return links in a dictionary format
 	links = {}
 	for e in engine:
-		if e == 'twitter':
-			links[e] = twitterSearch(search_term, nresults, followLinks, output)
+		if   e in ['twitter', 'facebook', 'reddit']:
+			links[e] = socialSearch(search_term, extra_params, e, nresults, followLinks, output)
 		elif e in ['google', 'yahoo', 'bing', 'blekko', 'ask']:
-			links[e] = webSearch(search_term, e, site, nresults, output)
+			links[e] = webSearch(search_term, extra_params, e, site, nresults, output)
 		
 	return links
 	
@@ -175,6 +212,7 @@ def searchFromBash():
 	nresults = 10
 	followLinks = True
 	searchAll = False
+	extra_params = False
 	
 	for o, a in opts:
 		if   o == '--engine':
@@ -188,9 +226,10 @@ def searchFromBash():
 		elif o == '--site':
 			site=site
 			
-	if searchAll: engine = ['google', 'yahoo', 'bing', 'blekko', 'ask', 'twitter']
+	if searchAll: engine = ['google', 'yahoo', 'bing', 'blekko', 'ask', 'twitter', 'facebook']#, 'reddit']
 		
-	Search(search_term, engine=engine, site=site, followLinks=followLinks, nresults=nresults, output='p')
+	Search(search_term, extra_params=extra_params, engine=engine, site=site, followLinks=followLinks, nresults=nresults, output='p')
 
 if __name__ == '__main__':
+	#Search('Radiohead', engine=['twitter', 'facebook'], output='p')
 	searchFromBash()
